@@ -1,44 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const siteController = require('./controllers/site.controller.js'); 
+const dashboardController = require('./controllers/dashboard.controller.js');
 
 // export the router
 module.exports = router;
 
-//routes define here
-router.get('/',         showHome);
-router.get('/about',    showAbout);
-router.get('/contact',  showContact);
-router.post('/contact', processContact);
-router.get('/:username/:post_slug', showProfile);
+// site routes ====================================================
+router.get('/',         siteController.showHome);
+router.get('/about',    siteController.showAbout);
+router.get('/contact',  siteController.showContact);
+router.post('/contact', siteController.processContact);
+router.get('/:username/:post_slug', siteController.showProfile);
 
-//404
-router.use(show404);
+// dashboard routes ================================================
+router.get('/dashboard', dashboardController.showDashboard);
 
-
-function showHome(req, res){
-    res.sendFile(path.join(__dirname, '../index.html'));
-};
-
-function showAbout(req, res) {
-    res.json({ message: 'im the about page' });
-};
-
-function showContact(req, res) {
-    res.sendFile(path.join(__dirname, '../contact.html'));
-};
-    
-function processContact(req, res){
-    console.log(req.body);
-    res.send('Hello ' + req.body.name + ' !');
-};
-
-function showProfile(req, res){
-    console.log(req.params);
-    res.send('You are the best ' + req.params.username + ' by ' + req.params.post_slug);
-};
-
-function show404(req, res, next){
-    res.status(404);
-    res.sendFile(path.join(__dirname, '../404.html'));
-};
+// 404 =============================================================
+router.use(siteController.show404);
