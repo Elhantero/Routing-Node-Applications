@@ -3,6 +3,7 @@ const router = express.Router();
 const path = require('path');
 const siteController = require('./controllers/site.controller.js'); 
 const dashboardController = require('./controllers/dashboard.controller.js');
+const nameCheckMiddleware = require('./middleware/nameChecks.js');
 
 // export the router
 module.exports = router;
@@ -12,7 +13,7 @@ router.get('/',         siteController.showHome);
 router.get('/about',    siteController.showAbout);
 router.get('/contact',  siteController.showContact);
 router.post('/contact', siteController.processContact);
-router.get('/:username/:post_slug', siteController.showProfile);
+router.get('/:username/:post_slug', nameCheckMiddleware, siteController.showProfile);
 
 // dashboard routes ================================================
 router.get('/dashboard', dashboardController.showDashboard);
